@@ -74,17 +74,19 @@ function Hero() {
               x: { type: 'spring', stiffness: 40, damping: 20 },
               y: { type: 'spring', stiffness: 40, damping: 20 },
             }}
-            /* brightness-[0.88] gives a slightly dimmed/dull luxury mood so text & buttons pop out */
             className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.88] ken-burns"
           />
         </AnimatePresence>
 
-        {/* Dark Ambient Vignette Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/75" />
+        {/* Dark Vignette Overlay - Enhanced for mobile bottom text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/85 md:from-black/60 md:via-black/30 md:to-black/75" />
       </motion.div>
 
-      {/* Hero Content */}
-      <motion.div style={{ opacity }} className="relative z-10 h-full flex flex-col justify-center container-luxe text-white">
+      {/* Hero Content - Positioned at bottom on mobile (justify-end pb-20) to reveal full image */}
+      <motion.div
+        style={{ opacity }}
+        className="relative z-10 h-full flex flex-col justify-end md:justify-center pb-20 md:pb-0 container-luxe text-white"
+      >
         <div className="max-w-5xl">
           <h1 className="heading-hero">
             <SplitHeading text="Designing spaces" />
@@ -93,13 +95,13 @@ function Hero() {
             <SplitHeading text="generations." />
           </h1>
 
-          {/* Subheading & Buttons positioned cleanly */}
-          <div className="mt-8 md:mt-14 space-y-6">
+          {/* Subheading & Buttons positioned cleanly at the bottom */}
+          <div className="mt-5 md:mt-14 space-y-4 md:space-y-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.0, duration: 0.9 }}
-              className="uppercase tracking-[0.22em] font-medium text-white/90 text-xs md:text-sm"
+              className="uppercase tracking-[0.2em] font-medium text-white/90 text-xs md:text-sm"
             >
               <span className="text-accent">◆</span>&nbsp;&nbsp;Architecture · Interior · Landscape&nbsp;&nbsp;·&nbsp;&nbsp;Est. 2011
             </motion.div>
@@ -108,11 +110,11 @@ function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.9 }}
-              className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 md:gap-8 pt-2"
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 md:gap-8 pt-1 md:pt-2"
             >
               <Link
                 to="/projects"
-                className="group inline-flex items-center justify-center gap-4 bg-accent hover:bg-accent/90 text-white border border-white/60 px-8 md:px-10 py-4 md:py-5 uppercase tracking-[0.2em] text-xs md:text-base font-medium transition-transform shadow-lg w-full sm:w-auto text-center"
+                className="group inline-flex items-center justify-center gap-4 bg-accent hover:bg-accent/90 text-white border border-white/60 px-8 md:px-10 py-3.5 md:py-5 uppercase tracking-[0.2em] text-xs md:text-base font-medium transition-transform shadow-lg w-full sm:w-auto text-center"
               >
                 Explore projects
                 <span className="transition-transform group-hover:translate-x-1">→</span>
@@ -129,7 +131,7 @@ function Hero() {
       </motion.div>
 
       {/* Slide Indicators at Bottom Right */}
-      <div className="absolute bottom-8 md:bottom-10 right-6 md:right-10 z-20 flex items-center gap-2.5 md:gap-3">
+      <div className="absolute bottom-6 md:bottom-10 right-6 md:right-10 z-20 flex items-center gap-2.5 md:gap-3">
         {[0, 1, 2].map((idx) => (
           <button
             key={idx}
