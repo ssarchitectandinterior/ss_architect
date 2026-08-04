@@ -16,6 +16,9 @@ const mobileHeroImages = [
   '/hero/hero-mobile-1.jpg',
   '/hero/hero-mobile-2.jpg',
   '/hero/hero-mobile-3.jpg',
+  '/hero/hero-mobile-4.jpg',
+  '/hero/hero-mobile-5.jpg',
+  '/hero/hero-mobile-6.jpg',
 ];
 
 function Hero() {
