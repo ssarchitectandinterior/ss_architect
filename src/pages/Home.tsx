@@ -7,6 +7,9 @@ const desktopHeroImages = [
   '/hero/hero-1.jpg',
   '/hero/hero-2.jpg',
   '/hero/hero-3.jpg',
+  '/hero/hero-4.jpg',
+  '/hero/hero-5.jpg',
+  '/hero/hero-6.jpg',
 ];
 
 const mobileHeroImages = [
@@ -33,14 +36,23 @@ function Hero() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // When switching between mobile & laptop screen sizes, reset index safely
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [isMobile]);
+
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % 3);
+      setCurrentImageIndex((prevIndex) => {
+        const total = isMobile ? mobileHeroImages.length : desktopHeroImages.length;
+        return (prevIndex + 1) % total;
+      });
     }, 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isMobile]);
 
-  const currentImageSrc = isMobile ? mobileHeroImages[currentImageIndex] : desktopHeroImages[currentImageIndex];
+  const activeImages = isMobile ? mobileHeroImages : desktopHeroImages;
+  const currentImageSrc = activeImages[currentImageIndex % activeImages.length];
 
   return (
     <section
@@ -78,11 +90,11 @@ function Hero() {
           />
         </AnimatePresence>
 
-        {/* Dark Vignette Overlay - Enhanced for mobile bottom text legibility */}
+        {/* Dark Vignette Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/85 md:from-black/60 md:via-black/30 md:to-black/75" />
       </motion.div>
 
-      {/* Hero Content - Positioned at bottom on mobile (justify-end pb-20) to reveal full image */}
+      {/* Hero Content */}
       <motion.div
         style={{ opacity }}
         className="relative z-10 h-full flex flex-col justify-end md:justify-center pb-20 md:pb-0 container-luxe text-white"
@@ -95,7 +107,7 @@ function Hero() {
             <SplitHeading text="generations." />
           </h1>
 
-          {/* Subheading & Buttons positioned cleanly at the bottom */}
+          {/* Subheading & Buttons positioned cleanly */}
           <div className="mt-5 md:mt-14 space-y-4 md:space-y-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -132,7 +144,7 @@ function Hero() {
 
       {/* Slide Indicators at Bottom Right */}
       <div className="absolute bottom-6 md:bottom-10 right-6 md:right-10 z-20 flex items-center gap-2.5 md:gap-3">
-        {[0, 1, 2].map((idx) => (
+        {activeImages.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentImageIndex(idx)}
