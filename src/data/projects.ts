@@ -1,7 +1,7 @@
 export type Project = {
   slug: string;
   title: string;
-  category: 'Residential Villa' | 'Apartment' | 'Commercial' | 'Landscape' | 'Interiors' | string;
+  category: 'Residential' | 'Villa' | 'Apartment' | 'Commercial' | 'Landscape' | 'Interiors' | string;
   location: string;
   area: string;
   year: number;
@@ -23,7 +23,7 @@ export const projects: Project[] = [
   {
     slug: 'senthilnathan-villa',
     title: 'Senthilnathan Residence',
-    category: 'Residential Villa',
+    category: 'Villa',
     location: 'Pollachi, Tamil Nadu',
     area: '8,800 sq.ft',
     year: 2026,
@@ -47,7 +47,7 @@ export const projects: Project[] = [
   {
     slug: 'monolith-house',
     title: 'Monolith House',
-    category: 'Residential Villa',
+    category: 'Residential',
     location: 'Alibag, Maharashtra',
     area: '9,200 sq.ft',
     year: 2024,
@@ -137,7 +137,7 @@ export const projects: Project[] = [
   {
     slug: 'linear-villa',
     title: 'Linear Villa',
-    category: 'Residential Villa',
+    category: 'Villa',
     location: 'Goa',
     area: '7,800 sq.ft',
     year: 2022,
@@ -153,6 +153,6 @@ export const projects: Project[] = [
   },
 ];
 
-export const categories = ['All', 'Residential Villa', 'Apartment', 'Commercial', 'Landscape', 'Interiors'] as const;
-export const categoryOptions = ['Residential Villa', 'Apartment', 'Commercial', 'Landscape', 'Interiors'] as const;
+export const categories = ['All', 'Residential', 'Villa', 'Apartment', 'Commercial', 'Landscape', 'Interiors'] as const;
+export const categoryOptions = ['Residential', 'Villa', 'Apartment', 'Commercial', 'Landscape', 'Interiors'] as const;
 

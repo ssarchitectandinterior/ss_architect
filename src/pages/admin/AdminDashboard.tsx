@@ -66,7 +66,7 @@ export default function AdminDashboard() {
 
   // Project Form State
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState<string>('Residential Villa');
+  const [category, setCategory] = useState<string>('Residential');
   const [client, setClient] = useState('');
   const [location, setLocation] = useState('');
   const [year, setYear] = useState(new Date().getFullYear().toString());
@@ -335,7 +335,7 @@ export default function AdminDashboard() {
     } else {
       setEditingProjectId(null);
       setTitle('');
-      setCategory('Residential Villa');
+      setCategory('Residential');
       setClient('');
       setLocation('');
       setYear(new Date().getFullYear().toString());
