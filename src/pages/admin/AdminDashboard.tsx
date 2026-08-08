@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Edit3, LogOut, Film, Image as ImageIcon, CheckCircle, AlertCircle, X, Images, BookOpen, Layers } from 'lucide-react';
-import { projects as staticProjects } from '@/data/projects';
+import { projects as staticProjects, categoryOptions } from '@/data/projects';
 import { journalPosts as staticJournalPosts } from '@/data/journal';
 
 interface ProjectItem {
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
 
   // Project Form State
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('Architecture');
+  const [category, setCategory] = useState<string>('Residential Villa');
   const [client, setClient] = useState('');
   const [location, setLocation] = useState('');
   const [year, setYear] = useState(new Date().getFullYear().toString());
@@ -335,7 +335,7 @@ export default function AdminDashboard() {
     } else {
       setEditingProjectId(null);
       setTitle('');
-      setCategory('Architecture');
+      setCategory('Residential Villa');
       setClient('');
       setLocation('');
       setYear(new Date().getFullYear().toString());
@@ -781,10 +781,9 @@ export default function AdminDashboard() {
                   <div>
                     <label className="eyebrow text-muted-foreground block mb-2">Category *</label>
                     <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full bg-background border border-input focus:border-accent outline-none px-4 py-2.5 text-sm rounded">
-                      <option value="Architecture">Architecture</option>
-                      <option value="Interior">Interior</option>
-                      <option value="Masterplan">Masterplan</option>
-                      <option value="Product">Product</option>
+                      {categoryOptions.map((catOption) => (
+                        <option key={catOption} value={catOption}>{catOption}</option>
+                      ))}
                     </select>
                   </div>
                 </div>

@@ -1,7 +1,7 @@
 export type Project = {
   slug: string;
   title: string;
-  category: 'Residential' | 'Villa' | 'Apartment' | 'Commercial' | 'Office' | 'Hospitality' | 'Restaurant' | 'Retail' | 'Landscape' | 'Interior' | 'Architecture';
+  category: 'Residential Villa' | 'Apartment' | 'Commercial' | 'Landscape' | 'Interiors' | string;
   location: string;
   area: string;
   year: number;
@@ -23,7 +23,7 @@ export const projects: Project[] = [
   {
     slug: 'senthilnathan-villa',
     title: 'Senthilnathan Residence',
-    category: 'Villa',
+    category: 'Residential Villa',
     location: 'Pollachi, Tamil Nadu',
     area: '8,800 sq.ft',
     year: 2026,
@@ -47,7 +47,7 @@ export const projects: Project[] = [
   {
     slug: 'monolith-house',
     title: 'Monolith House',
-    category: 'Villa',
+    category: 'Residential Villa',
     location: 'Alibag, Maharashtra',
     area: '9,200 sq.ft',
     year: 2024,
@@ -86,7 +86,7 @@ export const projects: Project[] = [
   {
     slug: 'terra-hospitality',
     title: 'Terra Boutique Hotel',
-    category: 'Hospitality',
+    category: 'Commercial',
     location: 'Udaipur, Rajasthan',
     area: '46,000 sq.ft',
     year: 2023,
@@ -103,7 +103,7 @@ export const projects: Project[] = [
   {
     slug: 'north-office',
     title: 'North Studios HQ',
-    category: 'Office',
+    category: 'Commercial',
     location: 'Bengaluru',
     area: '18,500 sq.ft',
     year: 2024,
@@ -120,7 +120,7 @@ export const projects: Project[] = [
   {
     slug: 'sable-restaurant',
     title: 'Sable',
-    category: 'Restaurant',
+    category: 'Interiors',
     location: 'Colaba, Mumbai',
     area: '4,100 sq.ft',
     year: 2023,
@@ -137,7 +137,7 @@ export const projects: Project[] = [
   {
     slug: 'linear-villa',
     title: 'Linear Villa',
-    category: 'Villa',
+    category: 'Residential Villa',
     location: 'Goa',
     area: '7,800 sq.ft',
     year: 2022,
@@ -153,4 +153,6 @@ export const projects: Project[] = [
   },
 ];
 
-export const categories = ['All','Residential','Villa','Apartment','Commercial','Office','Hospitality','Restaurant','Retail','Landscape','Interior','Architecture'] as const;
+export const categories = ['All', 'Residential Villa', 'Apartment', 'Commercial', 'Landscape', 'Interiors'] as const;
+export const categoryOptions = ['Residential Villa', 'Apartment', 'Commercial', 'Landscape', 'Interiors'] as const;
+

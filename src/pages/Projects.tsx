@@ -39,10 +39,21 @@ export default function Projects() {
   const allProjects = dbProjects.length > 0 ? dbProjects : staticProjects;
 
   const filtered = useMemo(() => {
-    return allProjects.filter(p =>
-      (cat === 'All' || p.category === cat) &&
-      (q === '' || (p.title + p.location + p.category).toLowerCase().includes(q.toLowerCase()))
-    );
+    return allProjects.filter(p => {
+      let matchesCat = (cat === 'All');
+      if (!matchesCat) {
+        const pCat = (p.category || '').trim();
+        if (pCat === cat) {
+          matchesCat = true;
+        } else if (cat === 'Residential Villa' && (pCat === 'Villa' || pCat === 'Residential' || pCat === 'Residential Villa')) {
+          matchesCat = true;
+        } else if (cat === 'Interiors' && (pCat === 'Interior' || pCat === 'Interiors' || pCat === 'Interior Design')) {
+          matchesCat = true;
+        }
+      }
+      const matchesQuery = q === '' || (p.title + p.location + (p.category || '')).toLowerCase().includes(q.toLowerCase());
+      return matchesCat && matchesQuery;
+    });
   }, [cat, q, allProjects]);
 
   return (
