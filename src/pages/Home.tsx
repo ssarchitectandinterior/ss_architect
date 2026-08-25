@@ -4,21 +4,21 @@ import { useRef, useState, useEffect } from 'react';
 import { SplitHeading } from '@/components/site/Reveal';
 
 const desktopHeroImages = [
-  '/hero/hero-1.jpg',
-  '/hero/hero-2.jpg',
-  '/hero/hero-3.jpg',
-  '/hero/hero-4.jpg',
-  '/hero/hero-5.jpg',
-  '/hero/hero-6.jpg',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787663474/1.png',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787663498/2.jpg',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787663543/3.png',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787663574/4.jpg',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787663595/5.png',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787663587/6.png',
 ];
 
 const mobileHeroImages = [
-  '/hero/hero-mobile-1.jpg',
-  '/hero/hero-mobile-2.jpg',
-  '/hero/hero-mobile-3.jpg',
-  '/hero/hero-mobile-4.jpg',
-  '/hero/hero-mobile-5.jpg',
-  '/hero/hero-mobile-6.jpg',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787664235/m_1.png',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787664242/m_2.png',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787664240/m_3.png',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787664238/m_4.png',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787664238/m_5.png',
+  'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787664239/m_6.png',
 ];
 
 function Hero() {
