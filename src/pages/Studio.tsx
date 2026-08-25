@@ -36,7 +36,7 @@ export default function Studio() {
           <div className="lg:col-span-8">
             <Reveal>
               <p className="heading-lg">
-                I opened Atelier Norr because I wanted to draw slowly — with a room to think, a client to trust, and a builder we knew by name. Fifteen years and ninety-two projects later, that is still the only ambition.
+                I opened SS Architects &amp; Interiors because I wanted to draw slowly — with a room to think, a client to trust, and a builder we knew by name. Fifteen years and ninety-two projects later, that is still the only ambition.
               </p>
               <p className="mt-8 text-muted-foreground text-lg leading-relaxed max-w-2xl">
                 We are not a big firm. We are twenty-two people who care very deeply about the fall of light onto a limewashed wall. Our clients tend to stay clients — many of the homes we have built are second or third houses for the same family.

@@ -74,7 +74,7 @@ function Hero() {
           <motion.img
             key={currentImageSrc}
             src={currentImageSrc}
-            alt="Atelier Norr Architecture & Interior Portfolio"
+            alt="SS Architects & Interiors Architecture & Interior Portfolio"
             initial={{ opacity: 0, scale: 1.05 }}
             animate={{
               opacity: 1,
@@ -164,7 +164,7 @@ function Hero() {
 
 export default function Home() {
   useEffect(() => {
-    document.title = 'Atelier Norr — Architecture & Interior Design';
+    document.title = 'SS Architects & Interiors — Architecture & Interior Design';
   }, []);
   return (
     <>

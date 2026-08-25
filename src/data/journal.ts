@@ -33,7 +33,7 @@ export const journalPosts: JournalPost[] = [
     readTime: '6 min read',
     author: {
       name: 'Aditya & Norah Sen',
-      role: 'Principal Architects, Atelier Norr',
+      role: 'Principal Architects, SS Architects & Interiors',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
     },
     coverImage: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=80',
@@ -77,7 +77,7 @@ export const journalPosts: JournalPost[] = [
     date: 'May 2026',
     readTime: '9 min read',
     author: {
-      name: 'Atelier Norr Research Team',
+      name: 'SS Architects & Interiors Research Team',
       role: 'Material Culture Division',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
     },
@@ -157,7 +157,7 @@ export const journalPosts: JournalPost[] = [
     date: 'Jan 2026',
     readTime: '5 min read',
     author: {
-      name: 'Atelier Norr Team',
+      name: 'SS Architects & Interiors Team',
       role: 'Design Lab',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
     },

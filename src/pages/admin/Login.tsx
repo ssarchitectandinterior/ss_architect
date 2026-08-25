@@ -57,7 +57,7 @@ export default function AdminLogin() {
       >
         <div className="text-center space-y-2">
           <div className="eyebrow text-accent">Studio Admin</div>
-          <h1 className="font-display text-3xl tracking-tight">Atelier Norr Portal</h1>
+          <h1 className="font-display text-3xl tracking-tight">SS Architects &amp; Interiors Portal</h1>
           <p className="text-sm text-muted-foreground">Sign in to manage projects and media assets</p>
         </div>
 
@@ -75,7 +75,7 @@ export default function AdminLogin() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@ateliernorr.com"
+              placeholder="admin@ssarchitects.com"
               className="w-full bg-background border border-input focus:border-accent outline-none px-4 py-3 text-sm rounded transition-colors"
             />
           </div>

@@ -42,7 +42,7 @@ export default function Footer() {
               <div className="eyebrow text-accent mb-4">Contact</div>
               <ul className="space-y-2 text-white/70">
                 <li>12 Kala Ghoda Lane<br/>Mumbai 400001</li>
-                <li>hello@ateliernorr.com</li>
+                <li>hello@ssarchitects.com</li>
                 <li>+91 22 4890 2200</li>
               </ul>
             </div>
@@ -59,7 +59,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-20 pt-6 border-t border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-white/50">
-          <div>© {new Date().getFullYear()} Atelier Norr. All rights reserved.</div>
+          <div>© {new Date().getFullYear()} SS Architects &amp; Interiors. All rights reserved.</div>
           <div className="flex gap-6">
             <a href="#" className="hover:text-white">Privacy</a>
             <a href="#" className="hover:text-white">Terms</a>

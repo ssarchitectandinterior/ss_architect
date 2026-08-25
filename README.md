@@ -1,4 +1,4 @@
-# Atelier Norr
+# SS Architects & Interiors
 
 A premium React template for architecture, interior design, and creative studios. Built with Vite, React, Tailwind CSS, and Framer Motion.
 

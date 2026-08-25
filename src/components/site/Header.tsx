@@ -114,9 +114,9 @@ export default function Header() {
         }`}
       >
         <div className="container-luxe flex items-center justify-between h-[76px]">
-          <Link to="/" className="flex items-center gap-3 group" aria-label="Atelier Norr — home">
-            <span className="font-display text-2xl tracking-tight leading-none">
-              Atelier <span className="italic-serif">Norr</span>
+          <Link to="/" className="flex items-center gap-3 group" aria-label="SS Architects & Interiors — home">
+            <span className="font-display text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl tracking-tight leading-none uppercase whitespace-nowrap">
+              SS Architects <span className="italic-serif text-accent lowercase">&amp;</span> Interiors
             </span>
           </Link>
 
@@ -166,7 +166,7 @@ export default function Header() {
           >
             <div className="container-luxe h-full flex flex-col text-[#F6F6F4]">
               <div className="flex items-center justify-between h-[76px]">
-                <span className="font-display text-2xl">Atelier <span className="italic-serif">Norr</span></span>
+                <span className="font-display text-base sm:text-2xl uppercase tracking-tight">SS Architects <span className="italic-serif text-accent lowercase">&amp;</span> Interiors</span>
                 <button aria-label="Close menu" onClick={() => setOpen(false)} className="w-11 h-11 inline-flex items-center justify-center">
                   <X className="w-6 h-6" />
                 </button>
@@ -195,7 +195,7 @@ export default function Header() {
                 </div>
                 <div>
                   <div className="eyebrow text-accent mb-2">Contact</div>
-                  hello@ateliernorr.com<br/>+91 22 4890 2200
+                  hello@ssarchitects.com<br/>+91 22 4890 2200
                 </div>
                 <div>
                   <div className="eyebrow text-accent mb-2">Follow</div>

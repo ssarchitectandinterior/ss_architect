@@ -580,7 +580,7 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-2">
             <span className="eyebrow text-accent">Admin Portal</span>
             <span className="text-border">|</span>
-            <h1 className="font-display text-xl">Atelier Norr CMS</h1>
+            <h1 className="font-display text-xl">SS Architects &amp; Interiors CMS</h1>
           </div>
 
           {/* Navigation Tabs */}
