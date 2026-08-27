@@ -115,8 +115,8 @@ export default function Header() {
       >
         <div className="container-luxe flex items-center justify-between h-[76px]">
           <Link to="/" className="flex items-center gap-3 group" aria-label="SS Architects & Interiors — home">
-            <span className="font-display text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl tracking-tight leading-none uppercase whitespace-nowrap">
-              SS Architects <span className="italic-serif text-accent lowercase">&amp;</span> Interiors
+            <span className="font-display text-base xs:text-lg sm:text-xl md:text-2xl tracking-tight leading-none whitespace-nowrap">
+              SS Architects <span className="text-accent lowercase">&amp;</span> Interiors
             </span>
           </Link>
 
@@ -166,7 +166,7 @@ export default function Header() {
           >
             <div className="container-luxe h-full flex flex-col text-[#F6F6F4]">
               <div className="flex items-center justify-between h-[76px]">
-                <span className="font-display text-base sm:text-2xl uppercase tracking-tight">SS Architects <span className="italic-serif text-accent lowercase">&amp;</span> Interiors</span>
+                <span className="font-display text-xl sm:text-2xl tracking-tight">SS Architects <span className="text-accent lowercase">&amp;</span> Interiors</span>
                 <button aria-label="Close menu" onClick={() => setOpen(false)} className="w-11 h-11 inline-flex items-center justify-center">
                   <X className="w-6 h-6" />
                 </button>

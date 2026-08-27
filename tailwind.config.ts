@@ -18,6 +18,9 @@ export default {
     },
     extend: {
       fontFamily: {
+        display: ['Cormorant Garamond', 'Times New Roman', 'serif'],
+        serif: ['Cormorant Garamond', 'Times New Roman', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
         bagel: ['Bagel Fat One', 'cursive'],
       },
       colors: {
