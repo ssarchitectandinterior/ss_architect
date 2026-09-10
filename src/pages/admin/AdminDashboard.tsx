@@ -650,59 +650,67 @@ export default function AdminDashboard() {
               </button>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.map((proj) => (
-                <div key={proj.id} className="bg-card border border-border rounded-lg overflow-hidden flex flex-col group">
-                  <div className="aspect-[16/10] relative bg-muted overflow-hidden">
-                    <img src={proj.image_url} alt={proj.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <div className="absolute top-3 right-3 flex items-center gap-2">
-                      {proj.isStatic && (
-                        <span className="bg-accent/80 backdrop-blur text-white px-2 py-0.5 rounded text-[10px] uppercase font-mono">
-                          Pre-existing
-                        </span>
-                      )}
-                      {proj.gallery_urls && proj.gallery_urls.length > 0 && (
-                        <span className="bg-black/70 backdrop-blur text-white px-2.5 py-1 rounded text-xs font-mono flex items-center gap-1">
-                          <Images size={12} /> {proj.gallery_urls.length} Photos
-                        </span>
-                      )}
-                      {proj.video_url && (
-                        <span className="bg-black/70 backdrop-blur text-accent px-2.5 py-1 rounded text-xs font-mono flex items-center gap-1">
-                          <Film size={12} /> Video
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs text-accent uppercase tracking-widest">
-                        <span>{proj.category}</span>
-                        <span>{proj.year}</span>
+            {projects.length === 0 ? (
+              <div className="py-20 text-center text-muted-foreground bg-card border border-border rounded-lg p-8">
+                <p className="font-display text-2xl text-foreground mb-2">No projects added yet.</p>
+                <p className="text-sm max-w-md mx-auto mb-6">Upload your first project portfolio using the button below. All project data will be stored securely in Supabase.</p>
+                <button
+                  onClick={() => openProjectModal()}
+                  className="inline-flex items-center gap-2 bg-foreground text-background hover:bg-accent hover:text-white px-6 py-3 rounded transition-colors text-xs uppercase tracking-[0.15em] font-medium"
+                >
+                  <Plus size={16} /> Add Your First Project
+                </button>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {projects.map((proj) => (
+                  <div key={proj.id} className="bg-card border border-border rounded-lg overflow-hidden flex flex-col group">
+                    <div className="aspect-[16/10] relative bg-muted overflow-hidden">
+                      <img src={proj.image_url} alt={proj.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute top-3 right-3 flex items-center gap-2">
+                        {proj.gallery_urls && proj.gallery_urls.length > 0 && (
+                          <span className="bg-black/70 backdrop-blur text-white px-2.5 py-1 rounded text-xs font-mono flex items-center gap-1">
+                            <Images size={12} /> {proj.gallery_urls.length} Photos
+                          </span>
+                        )}
+                        {proj.video_url && (
+                          <span className="bg-black/70 backdrop-blur text-accent px-2.5 py-1 rounded text-xs font-mono flex items-center gap-1">
+                            <Film size={12} /> Video
+                          </span>
+                        )}
                       </div>
-                      <h3 className="font-display text-xl">{proj.title}</h3>
-                      <p className="text-xs text-muted-foreground">{proj.location} {proj.area ? `• ${proj.area}` : ''}</p>
                     </div>
+                    <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-xs text-accent uppercase tracking-widest">
+                          <span>{proj.category}</span>
+                          <span>{proj.year}</span>
+                        </div>
+                        <h3 className="font-display text-xl">{proj.title}</h3>
+                        <p className="text-xs text-muted-foreground">{proj.location} {proj.area ? `• ${proj.area}` : ''}</p>
+                      </div>
 
-                    <div className="flex items-center justify-end gap-2 pt-4 border-t border-border">
-                      <button
-                        onClick={() => openProjectModal(proj)}
-                        className="p-2 text-muted-foreground hover:text-foreground border border-border hover:border-foreground rounded transition-colors"
-                        title="Edit Project"
-                      >
-                        <Edit3 size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteProject(proj.id, proj.isStatic)}
-                        className="p-2 text-muted-foreground hover:text-destructive border border-border hover:border-destructive rounded transition-colors"
-                        title="Delete Project"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      <div className="flex items-center justify-end gap-2 pt-4 border-t border-border">
+                        <button
+                          onClick={() => openProjectModal(proj)}
+                          className="p-2 text-muted-foreground hover:text-foreground border border-border hover:border-foreground rounded transition-colors"
+                          title="Edit Project"
+                        >
+                          <Edit3 size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteProject(proj.id, proj.isStatic)}
+                          className="p-2 text-muted-foreground hover:text-destructive border border-border hover:border-destructive rounded transition-colors"
+                          title="Delete Project"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </>
         )}
 
@@ -722,52 +730,60 @@ export default function AdminDashboard() {
               </button>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {journalPosts.map((post) => (
-                <div key={post.id} className="bg-card border border-border rounded-lg overflow-hidden flex flex-col group">
-                  <div className="aspect-[16/10] relative bg-muted overflow-hidden">
-                    <img src={post.cover_image_url} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <div className="absolute top-3 right-3 flex items-center gap-2">
-                      {post.isStatic && (
-                        <span className="bg-accent/80 backdrop-blur text-white px-2 py-0.5 rounded text-[10px] uppercase font-mono">
-                          Pre-existing
+            {journalPosts.length === 0 ? (
+              <div className="py-20 text-center text-muted-foreground bg-card border border-border rounded-lg p-8">
+                <p className="font-display text-2xl text-foreground mb-2">No journal essays published yet.</p>
+                <p className="text-sm max-w-md mx-auto mb-6">Write and publish your first architectural article or essay.</p>
+                <button
+                  onClick={() => openJournalModal()}
+                  className="inline-flex items-center gap-2 bg-foreground text-background hover:bg-accent hover:text-white px-6 py-3 rounded transition-colors text-xs uppercase tracking-[0.15em] font-medium"
+                >
+                  <Plus size={16} /> Write Your First Essay
+                </button>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {journalPosts.map((post) => (
+                  <div key={post.id} className="bg-card border border-border rounded-lg overflow-hidden flex flex-col group">
+                    <div className="aspect-[16/10] relative bg-muted overflow-hidden">
+                      <img src={post.cover_image_url} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute top-3 right-3 flex items-center gap-2">
+                        <span className="bg-black/70 backdrop-blur text-accent px-2.5 py-1 rounded text-xs font-mono">
+                          {post.category}
                         </span>
-                      )}
-                      <span className="bg-black/70 backdrop-blur text-accent px-2.5 py-1 rounded text-xs font-mono">
-                        {post.category}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs text-muted-foreground uppercase tracking-widest">
-                        <span>{post.date}</span>
-                        <span>{post.read_time}</span>
                       </div>
-                      <h3 className="font-display text-xl">{post.title}</h3>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{post.excerpt}</p>
                     </div>
+                    <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground uppercase tracking-widest">
+                          <span>{post.date}</span>
+                          <span>{post.read_time}</span>
+                        </div>
+                        <h3 className="font-display text-xl">{post.title}</h3>
+                        <p className="text-xs text-muted-foreground line-clamp-2">{post.excerpt}</p>
+                      </div>
 
-                    <div className="flex items-center justify-end gap-2 pt-4 border-t border-border">
-                      <button
-                        onClick={() => openJournalModal(post)}
-                        className="p-2 text-muted-foreground hover:text-foreground border border-border hover:border-foreground rounded transition-colors"
-                        title="Edit Essay"
-                      >
-                        <Edit3 size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteJournal(post.id, post.isStatic)}
-                        className="p-2 text-muted-foreground hover:text-destructive border border-border hover:border-destructive rounded transition-colors"
-                        title="Delete Essay"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      <div className="flex items-center justify-end gap-2 pt-4 border-t border-border">
+                        <button
+                          onClick={() => openJournalModal(post)}
+                          className="p-2 text-muted-foreground hover:text-foreground border border-border hover:border-foreground rounded transition-colors"
+                          title="Edit Essay"
+                        >
+                          <Edit3 size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteJournal(post.id, post.isStatic)}
+                          className="p-2 text-muted-foreground hover:text-destructive border border-border hover:border-destructive rounded transition-colors"
+                          title="Delete Essay"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </main>
