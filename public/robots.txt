@@ -12,3 +12,9 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Sitemaps for Google Search Console & Search Engines
+Sitemap: https://ssarchitects.in/sitemap.xml
+Sitemap: https://ssarchitects.in/sitemap-pages.xml
+Sitemap: https://ssarchitects.in/sitemap-projects.xml
+Sitemap: https://ssarchitects.in/sitemap-journal.xml

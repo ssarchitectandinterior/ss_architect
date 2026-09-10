@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Reveal from '@/components/site/Reveal';
+import SEO from '@/components/site/SEO';
 import { projects as staticProjects } from '@/data/projects';
 import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 
@@ -90,8 +91,33 @@ export default function ProjectDetail() {
     { label: 'MATERIALS', value: Array.isArray(p.materials) ? p.materials.join(' · ') : p.materials },
   ].filter(item => item.value);
 
+  const projectJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'VisualArtwork',
+    name: p.title,
+    description: p.description,
+    image: p.cover,
+    creator: {
+      '@type': 'Organization',
+      name: 'SS Architects & Interiors',
+    },
+    locationCreated: {
+      '@type': 'Place',
+      name: p.location,
+    },
+  };
+
   return (
     <>
+      <SEO
+        title={`${p.title} — ${p.category} in ${p.location}`}
+        description={`${p.title}: A ${p.category.toLowerCase()} architectural commission in ${p.location} by SS Architects & Interiors. ${p.description}`}
+        canonical={`/projects/${p.slug}`}
+        image={p.cover}
+        type="article"
+        keywords={`${p.title}, ${p.category} ${p.location}, luxury residence ${p.location}, SS Architects projects`}
+        jsonLd={projectJsonLd}
+      />
       <section className="pt-[76px] bg-[#111] text-white">
         <div className="relative h-[85vh] overflow-hidden">
           <motion.img

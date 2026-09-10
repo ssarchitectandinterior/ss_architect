@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import { SplitHeading } from '@/components/site/Reveal';
+import SEO from '@/components/site/SEO';
 
 const desktopHeroImages = [
   'https://res.cloudinary.com/swvqqwzn/image/upload/f_webp,q_auto/v1787663474/1.png',
@@ -163,11 +164,14 @@ function Hero() {
 }
 
 export default function Home() {
-  useEffect(() => {
-    document.title = 'SS Architects & Interiors — Architecture & Interior Design';
-  }, []);
   return (
     <>
+      <SEO
+        title="SS Architects & Interiors — Architecture & Interior Design Studio Mumbai"
+        description="SS Architects & Interiors is a Mumbai-based architecture and interior design studio crafting quiet, material-first residences, luxury villas, hospitality and commercial spaces since 2011."
+        canonical="/"
+        keywords="architecture studio Mumbai, interior designer Mumbai, luxury villa architecture, residential design India, SS Architects"
+      />
       <Hero />
     </>
   );

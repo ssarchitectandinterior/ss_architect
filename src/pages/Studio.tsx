@@ -1,5 +1,6 @@
 import Reveal from '@/components/site/Reveal';
 import PageHeader from '@/components/site/PageHeader';
+import SEO from '@/components/site/SEO';
 
 const team = [
   { n: 'Ishaan Verma', r: 'Founder & Principal Architect', img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80' },
@@ -22,6 +23,12 @@ const timeline = [
 export default function Studio() {
   return (
     <>
+      <SEO
+        title="Studio — Practice & Philosophy | SS Architects & Interiors"
+        description="Learn about SS Architects & Interiors — a Mumbai-based architecture practice founded in 2011 specializing in slow, material-first residential, commercial, and landscape design."
+        canonical="/studio"
+        keywords="SS Architects studio, Ishaan Verma architect, Mumbai architecture firm, sustainable interior design, tropical architecture practice"
+      />
       <PageHeader
         eyebrow="Studio"
         title={<>A quiet <span className="italic-serif text-accent">practice,</span><br/>fifteen years in.</>}

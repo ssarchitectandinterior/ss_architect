@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Film } from 'lucide-react';
 import PageHeader from '@/components/site/PageHeader';
+import SEO from '@/components/site/SEO';
 import { projects as staticProjects, categories } from '@/data/projects';
 import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 
@@ -60,6 +61,12 @@ export default function Projects() {
 
   return (
     <>
+      <SEO
+        title="Architecture & Interior Portfolio | SS Architects & Interiors"
+        description="Browse our portfolio of luxury residential villas, boutique hotels, apartments, and commercial projects across Mumbai, Goa, Alibag, Udaipur, and Bengaluru."
+        canonical="/projects"
+        keywords="architecture portfolio, luxury villa design, interior architecture portfolio, residential projects Mumbai, hospitality design India"
+      />
       <PageHeader
         eyebrow="Projects"
         title={<>Selected <span className="italic-serif text-accent">work.</span></>}

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { z } from 'zod';
 import PageHeader from '@/components/site/PageHeader';
 import Reveal from '@/components/site/Reveal';
+import SEO from '@/components/site/SEO';
 
 const schema = z.object({
   name: z.string().trim().min(2, 'Please share your name').max(100),
@@ -61,8 +62,35 @@ export default function Contact() {
     }
   };
 
+  const contactJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Contact SS Architects & Interiors',
+    description: 'Get in touch with SS Architects & Interiors to begin an architectural or interior design commission.',
+    mainEntity: {
+      '@type': 'ArchitecturalFirm',
+      name: 'SS Architects & Interiors',
+      telephone: '+91-22-4890-2200',
+      email: 'hello@ateliernorr.com',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: '12 Kala Ghoda Lane',
+        addressLocality: 'Mumbai',
+        postalCode: '400001',
+        addressCountry: 'IN',
+      },
+    },
+  };
+
   return (
     <>
+      <SEO
+        title="Contact & Consultations | SS Architects & Interiors"
+        description="Schedule a consultation with SS Architects & Interiors in Mumbai. Connect with our principal architects for residential, luxury villa, or commercial commissions."
+        canonical="/contact"
+        keywords="contact architect Mumbai, architectural consultation, luxury villa architect inquiry, SS Architects contact"
+        jsonLd={contactJsonLd}
+      />
       <PageHeader
         eyebrow="Contact"
         title={<>Begin a <span className="italic-serif text-accent">commission.</span></>}

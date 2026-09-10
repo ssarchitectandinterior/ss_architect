@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PageHeader from '@/components/site/PageHeader';
 import Reveal from '@/components/site/Reveal';
+import SEO from '@/components/site/SEO';
 import { journalPosts as staticPosts } from '@/data/journal';
 import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 
@@ -35,6 +36,12 @@ export default function Journal() {
 
   return (
     <>
+      <SEO
+        title="Journal & Essays on Architecture | SS Architects & Interiors"
+        description="Read architectural essays, material field notes, and interviews on slow design, local masonry, and climate-responsive architecture from SS Architects & Interiors."
+        canonical="/journal"
+        keywords="architectural journal, architectural essays, material culture, monsoon design, South Asian architecture blog"
+      />
       <PageHeader
         eyebrow="Journal"
         title={<>Notes from<br/><span className="italic-serif text-accent">the studio.</span></>}

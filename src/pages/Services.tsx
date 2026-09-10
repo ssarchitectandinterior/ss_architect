@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import PageHeader from '@/components/site/PageHeader';
 import Reveal from '@/components/site/Reveal';
+import SEO from '@/components/site/SEO';
 
 const img = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=800&q=80`;
 
@@ -27,6 +28,12 @@ export default function Services() {
 
   return (
     <>
+      <SEO
+        title="Architectural & Interior Design Services | SS Architects & Interiors"
+        description="Comprehensive architectural services, interior design, landscape planning, urban master planning, and turnkey project delivery by SS Architects & Interiors."
+        canonical="/services"
+        keywords="architectural services Mumbai, interior design services, landscape architecture, turnkey architectural execution, master planning India"
+      />
       <PageHeader
         eyebrow="Services"
         title={<>One studio,<br/><span className="italic-serif text-accent">one drawing.</span></>}

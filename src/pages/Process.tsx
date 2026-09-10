@@ -1,5 +1,6 @@
 import PageHeader from '@/components/site/PageHeader';
 import Reveal from '@/components/site/Reveal';
+import SEO from '@/components/site/SEO';
 
 const stages = [
   ['Discovery', 'A first meeting, always in person if possible. We listen more than we sketch.'],
@@ -18,6 +19,12 @@ const stages = [
 export default function Process() {
   return (
     <>
+      <SEO
+        title="Our Design Process & Methodology | SS Architects & Interiors"
+        description="Discover our 11-stage architectural process from initial site discovery, climate research, and concept modeling to working drawings, site execution, and handover."
+        canonical="/process"
+        keywords="architectural process, architectural design stages, site research, 3D architectural modeling, construction supervision"
+      />
       <PageHeader
         eyebrow="Process"
         title={<>A slow,<br/><span className="italic-serif text-accent">certain</span> path.</>}

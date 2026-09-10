@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Reveal from '@/components/site/Reveal';
+import SEO from '@/components/site/SEO';
 import { journalPosts as staticPosts } from '@/data/journal';
 import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 
@@ -95,8 +96,36 @@ export default function JournalDetail() {
 
   const related = staticPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    image: post.coverImage,
+    author: {
+      '@type': 'Person',
+      name: post.author?.name || 'SS Architects & Interiors',
+      jobTitle: post.author?.role || 'Architect',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'SS Architects & Interiors',
+      logo: 'https://ssarchitects.in/favicon.svg',
+    },
+    datePublished: post.date,
+  };
+
   return (
     <>
+      <SEO
+        title={`${post.title} | SS Architects Journal`}
+        description={post.excerpt}
+        canonical={`/journal/${post.slug}`}
+        image={post.coverImage}
+        type="article"
+        keywords={`${post.title}, ${post.category}, architecture essay, SS Architects journal`}
+        jsonLd={articleJsonLd}
+      />
       {/* Hero Section */}
       <section className="pt-[76px] bg-[#111] text-white">
         <div className="relative h-[70vh] min-h-[500px] overflow-hidden">
