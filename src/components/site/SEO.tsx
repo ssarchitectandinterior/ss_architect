@@ -10,7 +10,7 @@ export interface SEOProps {
   jsonLd?: Record<string, any> | Array<Record<string, any>>;
 }
 
-const DEFAULT_DOMAIN = 'https://ssarchitects.in';
+const DEFAULT_DOMAIN = 'https://ssachitectandinterior.com';
 const DEFAULT_DESCRIPTION = 'SS Architects & Interiors is a Mumbai-based architecture and interior design studio crafting quiet, material-first residences, luxury villas, hospitality and commercial spaces since 2011.';
 const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80';
 const DEFAULT_KEYWORDS = 'architecture studio Mumbai, interior design India, luxury villa architect, residential architecture, interior designer Mumbai, tropical luxury architecture, SS Architects';

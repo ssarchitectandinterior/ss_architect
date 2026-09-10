@@ -110,7 +110,7 @@ export default function JournalDetail() {
     publisher: {
       '@type': 'Organization',
       name: 'SS Architects & Interiors',
-      logo: 'https://ssarchitects.in/favicon.svg',
+      logo: 'https://ssachitectandinterior.com/favicon.svg',
     },
     datePublished: post.date,
   };

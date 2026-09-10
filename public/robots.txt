@@ -14,7 +14,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps for Google Search Console & Search Engines
-Sitemap: https://ssarchitects.in/sitemap.xml
-Sitemap: https://ssarchitects.in/sitemap-pages.xml
-Sitemap: https://ssarchitects.in/sitemap-projects.xml
-Sitemap: https://ssarchitects.in/sitemap-journal.xml
+Sitemap: https://ssachitectandinterior.com/sitemap.xml
+Sitemap: https://ssachitectandinterior.com/sitemap-pages.xml
+Sitemap: https://ssachitectandinterior.com/sitemap-projects.xml
+Sitemap: https://ssachitectandinterior.com/sitemap-journal.xml
