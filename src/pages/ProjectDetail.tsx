@@ -213,8 +213,13 @@ export default function ProjectDetail() {
 
           {p.gallery && p.gallery.map((g: string, i: number) => (
             <Reveal key={g + i} delay={i * 0.05}>
-              <div className={`overflow-hidden bg-muted ${i % 3 === 0 ? 'aspect-[21/9]' : i % 3 === 1 ? 'aspect-[16/10]' : 'aspect-[4/5] max-w-3xl mx-auto'}`}>
-                <img src={g} alt={`${p.title} ${i + 1}`} loading="lazy" className="w-full h-full object-cover" />
+              <div className="overflow-hidden bg-black/40 border border-white/10 rounded-md flex items-center justify-center p-2 md:p-4">
+                <img
+                  src={g}
+                  alt={`${p.title} photo ${i + 1}`}
+                  loading="lazy"
+                  className="w-auto h-auto max-w-full max-h-[90vh] object-contain mx-auto rounded-sm shadow-2xl"
+                />
               </div>
             </Reveal>
           ))}
