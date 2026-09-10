@@ -5,6 +5,7 @@ import Reveal from '@/components/site/Reveal';
 import SEO from '@/components/site/SEO';
 import { journalPosts as staticPosts } from '@/data/journal';
 import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
+import { getDeletedJournalIds } from '@/utils/deletedItems';
 
 export default function JournalDetail() {
   const { slug } = useParams();
@@ -70,7 +71,9 @@ export default function JournalDetail() {
     fetchArticle();
   }, [slug]);
 
-  const post = dbPost || staticPosts.find((p) => p.slug === slug);
+  const deletedIds = getDeletedJournalIds();
+  const rawPost = dbPost || staticPosts.find((p) => p.slug === slug);
+  const post = (rawPost && !deletedIds.has(rawPost.slug) && (!slug || !deletedIds.has(slug))) ? rawPost : null;
 
   if (loading) {
     return (

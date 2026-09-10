@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Edit3, LogOut, Film, Image as ImageIcon, CheckCircle, AlertCircle, X, Images, BookOpen, Layers } from 'lucide-react';
 import { projects as staticProjects, categoryOptions } from '@/data/projects';
 import { journalPosts as staticJournalPosts } from '@/data/journal';
+import { getDeletedProjectIds, addDeletedProjectId, getDeletedJournalIds, addDeletedJournalId } from '@/utils/deletedItems';
 
 interface ProjectItem {
   id: string;
@@ -160,6 +161,9 @@ export default function AdminDashboard() {
       }
     }
 
+    const deletedIds = getDeletedProjectIds();
+    const filteredDbProjs = dbProjs.filter((p) => !deletedIds.has(p.id));
+
     // Map static projects
     const mappedStatic: ProjectItem[] = staticProjects.map((p) => ({
       id: p.slug,
@@ -181,9 +185,9 @@ export default function AdminDashboard() {
       isStatic: true,
     }));
 
-    // Filter out static ones that have been overridden in DB
-    const dbSlugs = new Set(dbProjs.map((p) => p.id));
-    const merged = [...dbProjs, ...mappedStatic.filter((p) => !dbSlugs.has(p.id))];
+    // Filter out static ones that have been overridden in DB or deleted
+    const dbSlugs = new Set(filteredDbProjs.map((p) => p.id));
+    const merged = [...filteredDbProjs, ...mappedStatic.filter((p) => !dbSlugs.has(p.id) && !deletedIds.has(p.id))];
 
     setProjects(merged);
   };
@@ -203,6 +207,9 @@ export default function AdminDashboard() {
       }
     }
 
+    const deletedIds = getDeletedJournalIds();
+    const filteredDbJournals = dbJournals.filter((j) => !deletedIds.has(j.id) && !deletedIds.has(j.slug));
+
     // Map static journal posts
     const mappedStatic: JournalItem[] = staticJournalPosts.map((j) => ({
       id: j.slug,
@@ -220,9 +227,9 @@ export default function AdminDashboard() {
       isStatic: true,
     }));
 
-    // Filter out static ones overridden in DB
-    const dbSlugs = new Set(dbJournals.map((j) => j.slug));
-    const merged = [...dbJournals, ...mappedStatic.filter((j) => !dbSlugs.has(j.slug))];
+    // Filter out static ones overridden in DB or deleted
+    const dbSlugs = new Set(filteredDbJournals.map((j) => j.slug));
+    const merged = [...filteredDbJournals, ...mappedStatic.filter((j) => !dbSlugs.has(j.slug) && !deletedIds.has(j.slug))];
 
     setJournalPosts(merged);
   };
@@ -424,17 +431,23 @@ export default function AdminDashboard() {
 
   const handleDeleteProject = async (id: string, isStatic?: boolean) => {
     if (!confirm('Are you sure you want to delete this project?')) return;
-    if (isStatic) {
-      setProjects((prev) => prev.filter((p) => p.id !== id));
-      return;
+    
+    // Track deletion persistently in localStorage
+    addDeletedProjectId(id);
+
+    if (isSupabaseConfigured() && !isStatic) {
+      try {
+        // Delete related project_media rows first to prevent FK constraint issues
+        await supabase.from('project_media').delete().eq('project_id', id);
+        const { error } = await supabase.from('projects').delete().eq('id', id);
+        if (error) console.error('Error deleting project from Supabase:', error);
+      } catch (err: any) {
+        console.error('Deletion error:', err);
+      }
     }
-    try {
-      const { error } = await supabase.from('projects').delete().eq('id', id);
-      if (error) throw error;
-      fetchProjects();
-    } catch (err: any) {
-      alert('Failed to delete project: ' + err.message);
-    }
+
+    setProjects((prev) => prev.filter((p) => p.id !== id));
+    fetchProjects();
   };
 
   // --- Journal Modal Functions ---
@@ -546,17 +559,21 @@ export default function AdminDashboard() {
 
   const handleDeleteJournal = async (id: string, isStatic?: boolean) => {
     if (!confirm('Are you sure you want to delete this journal entry?')) return;
-    if (isStatic) {
-      setJournalPosts((prev) => prev.filter((j) => j.id !== id));
-      return;
+    
+    // Track deletion persistently in localStorage
+    addDeletedJournalId(id);
+
+    if (isSupabaseConfigured() && !isStatic) {
+      try {
+        const { error } = await supabase.from('journal_posts').delete().eq('id', id);
+        if (error) console.error('Error deleting journal entry from Supabase:', error);
+      } catch (err: any) {
+        console.error('Deletion error:', err);
+      }
     }
-    try {
-      const { error } = await supabase.from('journal_posts').delete().eq('id', id);
-      if (error) throw error;
-      fetchJournalPosts();
-    } catch (err: any) {
-      alert('Failed to delete journal entry: ' + err.message);
-    }
+
+    setJournalPosts((prev) => prev.filter((j) => j.id !== id));
+    fetchJournalPosts();
   };
 
   const handleLogout = async () => {

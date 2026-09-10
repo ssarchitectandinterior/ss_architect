@@ -5,6 +5,7 @@ import Reveal from '@/components/site/Reveal';
 import SEO from '@/components/site/SEO';
 import { journalPosts as staticPosts } from '@/data/journal';
 import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
+import { getDeletedJournalIds } from '@/utils/deletedItems';
 
 export default function Journal() {
   const [dbPosts, setDbPosts] = useState<any[]>([]);
@@ -18,21 +19,27 @@ export default function Journal() {
       .then(({ data, error }) => {
         if (error) console.error('Error fetching Supabase journal posts:', error);
         else if (data && data.length > 0) {
-          const formatted = data.map((p) => ({
-            slug: p.slug || p.id,
-            title: p.title,
-            category: p.category,
-            date: p.date,
-            readTime: p.read_time,
-            coverImage: p.cover_image_url,
-            excerpt: p.excerpt,
-          }));
+          const deletedIds = getDeletedJournalIds();
+          const formatted = data
+            .filter((p) => !deletedIds.has(p.id) && !deletedIds.has(p.slug))
+            .map((p) => ({
+              slug: p.slug || p.id,
+              title: p.title,
+              category: p.category,
+              date: p.date,
+              readTime: p.read_time,
+              coverImage: p.cover_image_url,
+              excerpt: p.excerpt,
+            }));
           setDbPosts(formatted);
         }
       });
   }, []);
 
-  const allPosts = dbPosts.length > 0 ? [...dbPosts, ...staticPosts] : staticPosts;
+  const deletedIds = getDeletedJournalIds();
+  const filteredStatic = staticPosts.filter((p) => !deletedIds.has(p.slug));
+  const dbSlugs = new Set(dbPosts.map((p) => p.slug));
+  const allPosts = [...dbPosts, ...filteredStatic.filter((p) => !dbSlugs.has(p.slug))];
 
   return (
     <>

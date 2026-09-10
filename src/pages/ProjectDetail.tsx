@@ -5,6 +5,7 @@ import Reveal from '@/components/site/Reveal';
 import SEO from '@/components/site/SEO';
 import { projects as staticProjects } from '@/data/projects';
 import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
+import { getDeletedProjectIds } from '@/utils/deletedItems';
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -61,7 +62,9 @@ export default function ProjectDetail() {
       .catch(() => setLoading(false));
   }, [slug]);
 
-  const p = dbProject || staticProjects.find(x => x.slug === slug);
+  const deletedIds = getDeletedProjectIds();
+  const rawP = dbProject || staticProjects.find(x => x.slug === slug);
+  const p = (rawP && !deletedIds.has(rawP.slug) && (!slug || !deletedIds.has(slug))) ? rawP : null;
 
   if (loading) {
     return (

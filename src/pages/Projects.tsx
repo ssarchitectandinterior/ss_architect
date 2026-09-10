@@ -6,6 +6,7 @@ import PageHeader from '@/components/site/PageHeader';
 import SEO from '@/components/site/SEO';
 import { projects as staticProjects, categories } from '@/data/projects';
 import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
+import { getDeletedProjectIds } from '@/utils/deletedItems';
 
 export default function Projects() {
   const [cat, setCat] = useState<string>('All');
@@ -21,23 +22,29 @@ export default function Projects() {
       .then(({ data, error }) => {
         if (error) console.error('Error loading Supabase projects:', error);
         else if (data && data.length > 0) {
-          const formatted = data.map((p) => ({
-            slug: p.id,
-            title: p.title,
-            category: p.category,
-            location: p.location,
-            year: p.year,
-            area: p.client ? `Client: ${p.client}` : '',
-            cover: p.image_url,
-            video: p.video_url,
-            description: p.description,
-          }));
+          const deletedIds = getDeletedProjectIds();
+          const formatted = data
+            .filter((p) => !deletedIds.has(p.id))
+            .map((p) => ({
+              slug: p.id,
+              title: p.title,
+              category: p.category,
+              location: p.location,
+              year: p.year,
+              area: p.client ? `Client: ${p.client}` : '',
+              cover: p.image_url,
+              video: p.video_url,
+              description: p.description,
+            }));
           setDbProjects(formatted);
         }
       });
   }, []);
 
-  const allProjects = dbProjects.length > 0 ? dbProjects : staticProjects;
+  const deletedIds = getDeletedProjectIds();
+  const filteredStatic = staticProjects.filter((p) => !deletedIds.has(p.slug));
+  const dbSlugs = new Set(dbProjects.map((p) => p.slug));
+  const allProjects = [...dbProjects, ...filteredStatic.filter((p) => !dbSlugs.has(p.slug))];
 
   const filtered = useMemo(() => {
     return allProjects.filter(p => {
