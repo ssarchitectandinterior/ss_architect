@@ -11,7 +11,7 @@ export type Project = {
   client: string;
   services: string[];
   duration: string;
-  materials: string[];
+  materials?: string[];
   description: string;
   challenges: string;
   solution: string;

@@ -17,7 +17,7 @@ interface ProjectItem {
   area: string | null;
   duration: string | null;
   services: string | null;
-  materials: string | null;
+  materials?: string | null;
   description: string | null;
   challenges: string | null;
   solution: string | null;
@@ -74,7 +74,6 @@ export default function AdminDashboard() {
   const [area, setArea] = useState('');
   const [duration, setDuration] = useState('');
   const [services, setServices] = useState('');
-  const [materials, setMaterials] = useState('');
   const [description, setDescription] = useState('');
   const [challenges, setChallenges] = useState('');
   const [solution, setSolution] = useState('');
@@ -141,7 +140,7 @@ export default function AdminDashboard() {
         const { data: projectsData } = await supabase
           .from('projects')
           .select('*')
-          .order('created_at', { ascending: false });
+          .order('created_at', { ascending: true });
 
         if (projectsData) {
           const { data: mediaData } = await supabase
@@ -175,7 +174,7 @@ export default function AdminDashboard() {
       area: p.area,
       duration: p.duration,
       services: Array.isArray(p.services) ? p.services.join(' · ') : p.services,
-      materials: Array.isArray(p.materials) ? p.materials.join(' · ') : p.materials,
+      materials: p.materials ? (Array.isArray(p.materials) ? p.materials.join(' · ') : p.materials) : null,
       description: p.description,
       challenges: p.challenges,
       solution: p.solution,
@@ -187,7 +186,7 @@ export default function AdminDashboard() {
 
     // Filter out static ones that have been overridden in DB or deleted
     const dbSlugs = new Set(filteredDbProjs.map((p) => p.id));
-    const merged = [...filteredDbProjs, ...mappedStatic.filter((p) => !dbSlugs.has(p.id) && !deletedIds.has(p.id))];
+    const merged = [...mappedStatic.filter((p) => !dbSlugs.has(p.id) && !deletedIds.has(p.id)), ...filteredDbProjs];
 
     setProjects(merged);
   };
@@ -332,7 +331,6 @@ export default function AdminDashboard() {
       setArea(project.area || '');
       setDuration(project.duration || '');
       setServices(project.services || '');
-      setMaterials(project.materials || '');
       setDescription(project.description || '');
       setChallenges(project.challenges || '');
       setSolution(project.solution || '');
@@ -349,7 +347,6 @@ export default function AdminDashboard() {
       setArea('');
       setDuration('');
       setServices('');
-      setMaterials('');
       setDescription('');
       setChallenges('');
       setSolution('');
@@ -379,7 +376,7 @@ export default function AdminDashboard() {
       area: area || null,
       duration: duration || null,
       services: services || null,
-      materials: materials || null,
+      materials: null,
       description: description || null,
       challenges: challenges || null,
       solution: solution || null,
@@ -847,15 +844,9 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="eyebrow text-muted-foreground block mb-2">Services</label>
-                    <input type="text" value={services} onChange={(e) => setServices(e.target.value)} placeholder="Architecture · Interior Design" className="w-full bg-background border border-input focus:border-accent outline-none px-4 py-2.5 text-sm rounded" />
-                  </div>
-                  <div>
-                    <label className="eyebrow text-muted-foreground block mb-2">Materials</label>
-                    <input type="text" value={materials} onChange={(e) => setMaterials(e.target.value)} placeholder="Terracotta Brick · Kota Stone" className="w-full bg-background border border-input focus:border-accent outline-none px-4 py-2.5 text-sm rounded" />
-                  </div>
+                <div>
+                  <label className="eyebrow text-muted-foreground block mb-2">Services</label>
+                  <input type="text" value={services} onChange={(e) => setServices(e.target.value)} placeholder="Architecture · Interior Design" className="w-full bg-background border border-input focus:border-accent outline-none px-4 py-2.5 text-sm rounded" />
                 </div>
 
                 <div className="space-y-4 pt-4 border-t border-border">

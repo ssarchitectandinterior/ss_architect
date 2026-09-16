@@ -115,12 +115,12 @@ export default function Header() {
       >
         <div className="container-luxe flex items-center justify-between h-[76px]">
           <Link to="/" className="flex items-center gap-3 group" aria-label="SS Architects & Interiors — home">
-            <span className="font-display text-base xs:text-lg sm:text-xl md:text-2xl tracking-tight leading-none whitespace-nowrap">
+            <span className="font-canela text-xl sm:text-2xl md:text-[28px] lg:text-[32px] xl:text-[35px] tracking-tight leading-none whitespace-nowrap">
               SS Architects <span className="text-accent lowercase">&amp;</span> Interiors
             </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-9" aria-label="Primary">
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-9" aria-label="Primary">
             {nav.slice(1, -1).map((n) => (
               <NavLink
                 key={n.to}
@@ -166,7 +166,7 @@ export default function Header() {
           >
             <div className="container-luxe h-full flex flex-col text-[#F6F6F4]">
               <div className="flex items-center justify-between h-[76px]">
-                <span className="font-display text-xl sm:text-2xl tracking-tight">SS Architects <span className="text-accent lowercase">&amp;</span> Interiors</span>
+                <span className="font-canela text-2xl sm:text-3xl tracking-tight">SS Architects <span className="text-accent lowercase">&amp;</span> Interiors</span>
                 <button aria-label="Close menu" onClick={() => setOpen(false)} className="w-11 h-11 inline-flex items-center justify-center">
                   <X className="w-6 h-6" />
                 </button>

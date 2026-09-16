@@ -48,7 +48,6 @@ export default function ProjectDetail() {
             area: data.area || 'Custom Commission',
             duration: data.duration || 'N/A',
             services: data.services ? data.services.split(/[·,]/).map((s: string) => s.trim()) : [data.category, 'Architectural Design'],
-            materials: data.materials ? data.materials.split(/[·,]/).map((m: string) => m.trim()) : ['Natural Stone', 'Timber', 'Glass'],
             cover: data.image_url,
             video: data.video_url,
             description: data.description || 'Architectural commission crafted with precision and environmental sensitivity.',
@@ -91,7 +90,6 @@ export default function ProjectDetail() {
     { label: 'AREA', value: p.area },
     { label: 'DURATION', value: p.duration },
     { label: 'SERVICES', value: Array.isArray(p.services) ? p.services.join(' · ') : p.services },
-    { label: 'MATERIALS', value: Array.isArray(p.materials) ? p.materials.join(' · ') : p.materials },
   ].filter(item => item.value);
 
   const projectJsonLd = {

@@ -119,7 +119,19 @@ function Hero() {
               transition={{ delay: 1.0, duration: 0.9 }}
               className="uppercase tracking-[0.2em] font-medium text-white/90 text-xs md:text-sm"
             >
-              <span className="text-accent">◆</span>&nbsp;&nbsp;Architecture · Interior · Landscape&nbsp;&nbsp;·&nbsp;&nbsp;Est. 2011
+              {/* Mobile View: Two flush-left lines with vertically centered diamond */}
+              <div className="flex md:hidden items-center gap-3">
+                <span className="text-accent shrink-0 leading-none select-none text-[11px]">◆</span>
+                <div className="flex flex-col text-left leading-snug">
+                  <span>Architecture · Interior</span>
+                  <span>Landscape · Est. 2011</span>
+                </div>
+              </div>
+
+              {/* Laptop / Desktop View: Normal single line */}
+              <div className="hidden md:block">
+                <span className="text-accent">◆</span>&nbsp;&nbsp;Architecture · Interior · Landscape&nbsp;&nbsp;·&nbsp;&nbsp;Est. 2011
+              </div>
             </motion.div>
 
             <motion.div

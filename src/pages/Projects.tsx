@@ -18,7 +18,7 @@ export default function Projects() {
     supabase
       .from('projects')
       .select('*')
-      .order('created_at', { ascending: false })
+      .order('created_at', { ascending: true })
       .then(({ data, error }) => {
         if (error) console.error('Error loading Supabase projects:', error);
         else if (data && data.length > 0) {
@@ -44,7 +44,7 @@ export default function Projects() {
   const deletedIds = getDeletedProjectIds();
   const filteredStatic = staticProjects.filter((p) => !deletedIds.has(p.slug));
   const dbSlugs = new Set(dbProjects.map((p) => p.slug));
-  const allProjects = [...dbProjects, ...filteredStatic.filter((p) => !dbSlugs.has(p.slug))];
+  const allProjects = [...filteredStatic.filter((p) => !dbSlugs.has(p.slug)), ...dbProjects];
 
   const filtered = useMemo(() => {
     return allProjects.filter(p => {
@@ -77,7 +77,9 @@ export default function Projects() {
       <PageHeader
         eyebrow="Projects"
         title={<>Selected <span className="italic-serif text-accent">work.</span></>}
-        image="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=2000&q=80"
+        image="/projects-header.webp"
+        objectPosition="center 55%"
+        overlayClassName="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20"
         subtitle="Explore our completed architecture, interior, and landscape commissions. Integrated with dynamic media assets."
       />
 
