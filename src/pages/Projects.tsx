@@ -53,9 +53,7 @@ export default function Projects() {
         const pCat = (p.category || '').trim();
         if (pCat === cat) {
           matchesCat = true;
-        } else if (cat === 'Residential' && (pCat === 'Residential' || pCat === 'Residential Villa')) {
-          matchesCat = true;
-        } else if (cat === 'Villa' && (pCat === 'Villa' || pCat === 'Residential Villa')) {
+        } else if (cat === 'Residential' && (pCat === 'Residential' || pCat === 'Residential Villa' || pCat === 'Villa' || pCat === 'Apartment')) {
           matchesCat = true;
         } else if (cat === 'Interiors' && (pCat === 'Interior' || pCat === 'Interiors' || pCat === 'Interior Design')) {
           matchesCat = true;

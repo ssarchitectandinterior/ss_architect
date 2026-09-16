@@ -1,7 +1,7 @@
 export type Project = {
   slug: string;
   title: string;
-  category: 'Residential' | 'Villa' | 'Apartment' | 'Commercial' | 'Landscape' | 'Interiors' | string;
+  category: 'Residential' | 'Commercial' | 'Landscape' | 'Interiors' | string;
   location: string;
   area: string;
   year: number;
@@ -19,5 +19,5 @@ export type Project = {
 
 export const projects: Project[] = [];
 
-export const categories = ['All', 'Residential', 'Villa', 'Apartment', 'Commercial', 'Landscape', 'Interiors'] as const;
-export const categoryOptions = ['Residential', 'Villa', 'Apartment', 'Commercial', 'Landscape', 'Interiors'] as const;
+export const categories = ['All', 'Residential', 'Commercial', 'Landscape', 'Interiors'] as const;
+export const categoryOptions = ['Residential', 'Commercial', 'Landscape', 'Interiors'] as const;
