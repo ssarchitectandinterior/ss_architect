@@ -29,11 +29,12 @@ export default function Studio() {
         description="Learn about SS Architects & Interiors — a Mumbai-based architecture practice founded in 2011 specializing in slow, material-first residential, commercial, and landscape design."
         canonical="/studio"
         keywords="SS Architects studio, Sangavi Jaisankar architect, Coimbatore architecture firm, sustainable interior design, tropical architecture practice"
+        image="https://res.cloudinary.com/swvqqwzn/image/upload/v1789883204/services.webp"
       />
       <PageHeader
         eyebrow="Studio"
         title={<>A quiet <span className="italic-serif text-accent">practice,</span><br />fifteen years in.</>}
-        image="/studio-header.webp"
+        image="https://res.cloudinary.com/swvqqwzn/image/upload/v1789883204/services.webp"
         objectPosition="center 45%"
         overlayClassName="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20"
       />
