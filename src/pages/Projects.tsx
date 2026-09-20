@@ -71,11 +71,12 @@ export default function Projects() {
         description="Browse our portfolio of luxury residential villas, boutique hotels, apartments, and commercial projects across Mumbai, Goa, Alibag, Udaipur, and Bengaluru."
         canonical="/projects"
         keywords="architecture portfolio, luxury villa design, interior architecture portfolio, residential projects Mumbai, hospitality design India"
+        image="https://res.cloudinary.com/swvqqwzn/image/upload/v1789886977/ChatGPT_Image_Sep_7_2026_10_06_39_PM.webp"
       />
       <PageHeader
         eyebrow="Projects"
         title={<>Selected <span className="italic-serif text-accent">work.</span></>}
-        image="/projects-header.webp"
+        image="https://res.cloudinary.com/swvqqwzn/image/upload/v1789886977/ChatGPT_Image_Sep_7_2026_10_06_39_PM.webp"
         objectPosition="center 55%"
         overlayClassName="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20"
         subtitle="Explore our completed architecture, interior, and landscape commissions. Integrated with dynamic media assets."
