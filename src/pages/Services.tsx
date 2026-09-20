@@ -33,11 +33,12 @@ export default function Services() {
         description="Comprehensive architectural services, interior design, landscape planning, urban master planning, and turnkey project delivery by SS Architects & Interiors."
         canonical="/services"
         keywords="architectural services Mumbai, interior design services, landscape architecture, turnkey architectural execution, master planning India"
+        image="https://res.cloudinary.com/swvqqwzn/image/upload/v1789883204/services.webp"
       />
       <PageHeader
         eyebrow="Services"
         title={<>One studio,<br/><span className="italic-serif text-accent">one drawing.</span></>}
-        image="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=80"
+        image="https://res.cloudinary.com/swvqqwzn/image/upload/v1789883204/services.webp"
         subtitle="We take a project through every stage under one roof — from planning approvals to the last light fitting."
       />
 
