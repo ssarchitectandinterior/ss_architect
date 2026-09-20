@@ -21,6 +21,7 @@ export default {
         display: ['Cormorant Garamond', 'Times New Roman', 'serif'],
         serif: ['Cormorant Garamond', 'Times New Roman', 'serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        inter: ['Inter', 'system-ui', 'sans-serif'],
         bagel: ['Bagel Fat One', 'cursive'],
         canela: ['Canela', 'Canela Deck', 'Canela Text', 'Marcellus', 'Fraunces', 'serif'],
       },

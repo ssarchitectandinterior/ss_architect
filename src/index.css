@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&family=Marcellus&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Marcellus&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -90,6 +90,7 @@
   .font-display { font-family: var(--font-display); }
   .font-canela { font-family: var(--font-canela); }
   .font-sans { font-family: var(--font-sans); }
+  .font-inter { font-family: 'Inter', system-ui, sans-serif; }
 
   .eyebrow {
     @apply uppercase tracking-[0.25em] text-[11px] font-medium;
