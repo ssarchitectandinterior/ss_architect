@@ -124,13 +124,13 @@ function Hero() {
                 <span className="text-accent shrink-0 leading-none select-none text-[11px]">◆</span>
                 <div className="flex flex-col text-left leading-snug">
                   <span>Architecture · Interior</span>
-                  <span>Landscape · Est. 2011</span>
+                  <span>Landscape · Est. 2020</span>
                 </div>
               </div>
 
               {/* Laptop / Desktop View: Normal single line */}
               <div className="hidden md:block">
-                <span className="text-accent">◆</span>&nbsp;&nbsp;Architecture · Interior · Landscape&nbsp;&nbsp;·&nbsp;&nbsp;Est. 2011
+                <span className="text-accent">◆</span>&nbsp;&nbsp;Architecture · Interior · Landscape&nbsp;&nbsp;·&nbsp;&nbsp;Est. 2020
               </div>
             </motion.div>
 
@@ -180,7 +180,7 @@ export default function Home() {
     <>
       <SEO
         title="SS Architects & Interiors — Architecture & Interior Design Studio Mumbai"
-        description="SS Architects & Interiors is a Mumbai-based architecture and interior design studio crafting quiet, material-first residences, luxury villas, hospitality and commercial spaces since 2011."
+        description="SS Architects & Interiors is a Mumbai-based architecture and interior design studio crafting quiet, material-first residences, luxury villas, hospitality and commercial spaces since 2020."
         canonical="/"
         keywords="architecture studio Mumbai, interior designer Mumbai, luxury villa architecture, residential design India, SS Architects"
       />

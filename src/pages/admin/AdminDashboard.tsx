@@ -2,7 +2,27 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Trash2, Edit3, LogOut, Film, Image as ImageIcon, CheckCircle, AlertCircle, X, Images, BookOpen, Layers } from 'lucide-react';
+import {
+  Plus,
+  Trash2,
+  Edit3,
+  LogOut,
+  Film,
+  Image as ImageIcon,
+  CheckCircle,
+  AlertCircle,
+  X,
+  Images,
+  BookOpen,
+  Layers,
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
+  GripVertical,
+  Star,
+  Upload,
+  RotateCcw,
+} from 'lucide-react';
 import { projects as staticProjects, categoryOptions } from '@/data/projects';
 import { journalPosts as staticJournalPosts } from '@/data/journal';
 import { getDeletedProjectIds, addDeletedProjectId, getDeletedJournalIds, addDeletedJournalId } from '@/utils/deletedItems';
@@ -81,6 +101,18 @@ export default function AdminDashboard() {
   const [videoUrl, setVideoUrl] = useState('');
   const [galleryUrls, setGalleryUrls] = useState<string[]>([]);
   const [customGalleryInput, setCustomGalleryInput] = useState('');
+  const [projectGalleryDraggedIndex, setProjectGalleryDraggedIndex] = useState<number | null>(null);
+  const [projectGalleryDragOverIndex, setProjectGalleryDragOverIndex] = useState<number | null>(null);
+
+  // Dedicated Reorder Modal State
+  const [isReorderModalOpen, setIsReorderModalOpen] = useState(false);
+  const [reorderProject, setReorderProject] = useState<ProjectItem | null>(null);
+  const [reorderCoverUrl, setReorderCoverUrl] = useState('');
+  const [reorderGalleryUrls, setReorderGalleryUrls] = useState<string[]>([]);
+  const [reorderDraggedIndex, setReorderDraggedIndex] = useState<number | null>(null);
+  const [reorderDragOverIndex, setReorderDragOverIndex] = useState<number | null>(null);
+  const [reorderSaving, setReorderSaving] = useState(false);
+  const [reorderStatusMessage, setReorderStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   // Journal Modal State
   const [isJournalModalOpen, setIsJournalModalOpen] = useState(false);
@@ -298,6 +330,150 @@ export default function AdminDashboard() {
 
   const removeGalleryUrl = (index: number) => {
     setGalleryUrls((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  function reorderArray<T>(list: T[], startIndex: number, endIndex: number): T[] {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  }
+
+  const moveGalleryItem = (index: number, direction: 'left' | 'right') => {
+    setGalleryUrls((prev) => {
+      let targetIndex = index;
+      if (direction === 'left' && index > 0) targetIndex = index - 1;
+      else if (direction === 'right' && index < prev.length - 1) targetIndex = index + 1;
+      return reorderArray(prev, index, targetIndex);
+    });
+  };
+
+  const makeGalleryItemCover = (index: number) => {
+    const selected = galleryUrls[index];
+    const previousCover = imageUrl;
+    const remaining = galleryUrls.filter((_, i) => i !== index);
+    if (previousCover && previousCover !== selected && !remaining.includes(previousCover)) {
+      setGalleryUrls([previousCover, ...remaining]);
+    } else {
+      setGalleryUrls(remaining);
+    }
+    setImageUrl(selected);
+  };
+
+  // Reorder modal helpers
+  const openReorderModal = (project: ProjectItem) => {
+    setReorderProject(project);
+    setReorderCoverUrl(project.image_url);
+    setReorderGalleryUrls(project.gallery_urls ? [...project.gallery_urls] : []);
+    setReorderStatusMessage(null);
+    setReorderDraggedIndex(null);
+    setReorderDragOverIndex(null);
+    setIsReorderModalOpen(true);
+  };
+
+  const moveReorderGalleryItem = (index: number, direction: 'left' | 'right') => {
+    setReorderGalleryUrls((prev) => {
+      let targetIndex = index;
+      if (direction === 'left' && index > 0) targetIndex = index - 1;
+      else if (direction === 'right' && index < prev.length - 1) targetIndex = index + 1;
+      return reorderArray(prev, index, targetIndex);
+    });
+  };
+
+  const makeReorderItemCover = (index: number) => {
+    const selected = reorderGalleryUrls[index];
+    const prevCover = reorderCoverUrl;
+    const remaining = reorderGalleryUrls.filter((_, i) => i !== index);
+    if (prevCover && prevCover !== selected && !remaining.includes(prevCover)) {
+      setReorderGalleryUrls([prevCover, ...remaining]);
+    } else {
+      setReorderGalleryUrls(remaining);
+    }
+    setReorderCoverUrl(selected);
+  };
+
+  const removeReorderGalleryUrl = (index: number) => {
+    setReorderGalleryUrls((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleReorderMultipleUpload = async (files: FileList) => {
+    setUploading(true);
+    setReorderStatusMessage(null);
+    const newUrls: string[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const url = await handleLocalFileUpload(files[i], 'gallery');
+      if (url) newUrls.push(url);
+    }
+
+    if (newUrls.length > 0) {
+      setReorderGalleryUrls((prev) => [...prev, ...newUrls]);
+      setReorderStatusMessage({ type: 'success', text: `${newUrls.length} new photo(s) added!` });
+    }
+    setUploading(false);
+  };
+
+  const handleSaveReorderedProject = async () => {
+    if (!reorderProject) return;
+    setReorderSaving(true);
+    setReorderStatusMessage(null);
+
+    const projectId = reorderProject.id;
+    const isStatic = reorderProject.isStatic;
+
+    try {
+      if (isSupabaseConfigured() && !isStatic) {
+        // 1. Update project cover if changed
+        if (reorderCoverUrl !== reorderProject.image_url) {
+          const { error: coverErr } = await supabase
+            .from('projects')
+            .update({ image_url: reorderCoverUrl })
+            .eq('id', projectId);
+          if (coverErr) throw coverErr;
+        }
+
+        // 2. Re-insert project_media rows with sequential sort_order
+        const { error: deleteErr } = await supabase
+          .from('project_media')
+          .delete()
+          .eq('project_id', projectId)
+          .eq('file_type', 'image');
+        if (deleteErr) throw deleteErr;
+
+        if (reorderGalleryUrls.length > 0) {
+          const mediaPayload = reorderGalleryUrls.map((url, idx) => ({
+            project_id: projectId,
+            file_url: url,
+            file_type: 'image' as const,
+            sort_order: idx,
+          }));
+          const { error: insertErr } = await supabase
+            .from('project_media')
+            .insert(mediaPayload);
+          if (insertErr) throw insertErr;
+        }
+      }
+
+      // Update in-memory project state
+      setProjects((prev) =>
+        prev.map((p) =>
+          p.id === projectId
+            ? { ...p, image_url: reorderCoverUrl, gallery_urls: [...reorderGalleryUrls] }
+            : p
+        )
+      );
+
+      setReorderStatusMessage({ type: 'success', text: 'Image sequence saved successfully!' });
+      setTimeout(() => {
+        setIsReorderModalOpen(false);
+        fetchProjects();
+      }, 1000);
+    } catch (err: any) {
+      console.error('Error saving reordered images:', err);
+      setReorderStatusMessage({ type: 'error', text: err.message || 'Failed to save image order.' });
+    } finally {
+      setReorderSaving(false);
+    }
   };
 
   // --- Dynamic Journal Sections Helpers ---
@@ -689,6 +865,14 @@ export default function AdminDashboard() {
 
                       <div className="flex items-center justify-end gap-2 pt-4 border-t border-border">
                         <button
+                          onClick={() => openReorderModal(proj)}
+                          className="px-2.5 py-1.5 text-xs text-muted-foreground hover:text-accent border border-border hover:border-accent rounded transition-colors flex items-center gap-1.5"
+                          title="Rearrange Photos Order"
+                        >
+                          <ArrowUpDown size={14} />
+                          <span>Rearrange Photos</span>
+                        </button>
+                        <button
                           onClick={() => openProjectModal(proj)}
                           className="p-2 text-muted-foreground hover:text-foreground border border-border hover:border-foreground rounded transition-colors"
                           title="Edit Project"
@@ -962,24 +1146,112 @@ export default function AdminDashboard() {
                     </button>
                   </div>
 
-                  {/* Gallery Thumbnails List */}
+                  {/* Gallery Thumbnails List with Drag & Drop and Controls */}
                   {galleryUrls.length > 0 && (
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 pt-2">
-                      {galleryUrls.map((url, idx) => (
-                        <div key={idx} className="relative aspect-square rounded overflow-hidden border border-border group bg-muted">
-                          <img src={url} alt={`Gallery item ${idx + 1}`} className="w-full h-full object-cover" />
-                          <button
-                            type="button"
-                            onClick={() => removeGalleryUrl(idx)}
-                            className="absolute top-1 right-1 bg-destructive text-white p-1 rounded-full opacity-90 group-hover:opacity-100 hover:scale-110 transition-all"
-                          >
-                            <X size={12} />
-                          </button>
-                          <span className="absolute bottom-1 left-1 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">
-                            #{idx + 1}
-                          </span>
-                        </div>
-                      ))}
+                    <div className="space-y-2 pt-2">
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <span>💡 Drag photos to rearrange sequence, or use the arrow buttons. Click &apos;Cover&apos; to promote.</span>
+                        <span className="font-mono">{galleryUrls.length} photos</span>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        {galleryUrls.map((url, idx) => {
+                          const isDragging = projectGalleryDraggedIndex === idx;
+                          const isDragOver = projectGalleryDragOverIndex === idx;
+
+                          return (
+                            <div
+                              key={url + idx}
+                              draggable
+                              onDragStart={(e) => {
+                                setProjectGalleryDraggedIndex(idx);
+                                e.dataTransfer.effectAllowed = 'move';
+                              }}
+                              onDragOver={(e) => {
+                                e.preventDefault();
+                                if (projectGalleryDraggedIndex === null || projectGalleryDraggedIndex === idx) return;
+                                setProjectGalleryDragOverIndex(idx);
+                              }}
+                              onDragLeave={() => {
+                                if (projectGalleryDragOverIndex === idx) setProjectGalleryDragOverIndex(null);
+                              }}
+                              onDrop={(e) => {
+                                e.preventDefault();
+                                if (projectGalleryDraggedIndex === null || projectGalleryDraggedIndex === idx) return;
+                                setGalleryUrls((prev) => reorderArray(prev, projectGalleryDraggedIndex, idx));
+                                setProjectGalleryDraggedIndex(null);
+                                setProjectGalleryDragOverIndex(null);
+                              }}
+                              onDragEnd={() => {
+                                setProjectGalleryDraggedIndex(null);
+                                setProjectGalleryDragOverIndex(null);
+                              }}
+                              className={`group relative rounded-lg overflow-hidden border bg-muted transition-all select-none ${
+                                isDragging
+                                  ? 'opacity-40 scale-95 border-accent'
+                                  : isDragOver
+                                  ? 'border-accent shadow-[0_0_12px_rgba(200,160,90,0.3)] ring-2 ring-accent scale-[1.02]'
+                                  : 'border-border hover:border-foreground/40'
+                              }`}
+                            >
+                              <div className="aspect-[4/3] w-full overflow-hidden bg-black/20">
+                                <img
+                                  src={url}
+                                  alt={`Gallery item ${idx + 1}`}
+                                  className="w-full h-full object-cover pointer-events-none group-hover:scale-105 transition-transform duration-300"
+                                />
+                              </div>
+
+                              {/* Sequence Badge & Drag Handle */}
+                              <div className="absolute top-1.5 left-1.5 flex items-center gap-1 bg-black/75 backdrop-blur text-white text-[10px] font-mono font-bold px-1.5 py-0.5 rounded shadow">
+                                <GripVertical size={11} className="text-white/60 cursor-grab active:cursor-grabbing" />
+                                <span>#{idx + 1}</span>
+                              </div>
+
+                              {/* Remove Button */}
+                              <button
+                                type="button"
+                                onClick={() => removeGalleryUrl(idx)}
+                                className="absolute top-1.5 right-1.5 bg-destructive/90 hover:bg-destructive text-white p-1 rounded-full opacity-80 group-hover:opacity-100 hover:scale-110 transition-all shadow"
+                                title="Remove photo"
+                              >
+                                <X size={11} />
+                              </button>
+
+                              {/* Bottom Control Bar */}
+                              <div className="p-1.5 bg-card/95 border-t border-border flex items-center justify-between gap-1">
+                                <div className="flex items-center gap-0.5">
+                                  <button
+                                    type="button"
+                                    disabled={idx === 0}
+                                    onClick={() => moveGalleryItem(idx, 'left')}
+                                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-25 disabled:cursor-not-allowed hover:bg-muted rounded transition-colors"
+                                    title="Move earlier (←)"
+                                  >
+                                    <ChevronLeft size={13} />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    disabled={idx === galleryUrls.length - 1}
+                                    onClick={() => moveGalleryItem(idx, 'right')}
+                                    className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-25 disabled:cursor-not-allowed hover:bg-muted rounded transition-colors"
+                                    title="Move later (→)"
+                                  >
+                                    <ChevronRight size={13} />
+                                  </button>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => makeGalleryItemCover(idx)}
+                                  className="inline-flex items-center gap-1 text-[10px] text-accent hover:text-white hover:bg-accent px-1.5 py-0.5 rounded border border-accent/40 transition-colors uppercase font-medium"
+                                  title="Set as Main Cover Photo"
+                                >
+                                  <Star size={9} /> Cover
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -991,6 +1263,274 @@ export default function AdminDashboard() {
                   </button>
                 </div>
               </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* REARRANGE PROJECT IMAGES MODAL */}
+      <AnimatePresence>
+        {isReorderModalOpen && reorderProject && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 12 }}
+              className="bg-card border border-border w-full max-w-4xl rounded-xl shadow-2xl overflow-hidden my-8 flex flex-col max-h-[90vh]"
+            >
+              {/* Modal Header */}
+              <div className="p-6 border-b border-border flex items-center justify-between shrink-0">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-accent/15 text-accent text-xs font-mono px-2 py-0.5 rounded uppercase tracking-wider">
+                      Image Sequence Manager
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {1 + reorderGalleryUrls.length} total images
+                    </span>
+                  </div>
+                  <h3 className="font-display text-2xl text-foreground">
+                    Rearrange Photos — <span className="text-accent">{reorderProject.title}</span>
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    Drag and drop photos or use the arrows to set the exact order. Click &apos;Cover&apos; to promote any photo as the main project cover.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsReorderModalOpen(false)}
+                  className="p-2 text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Status Banner */}
+              {reorderStatusMessage && (
+                <div
+                  className={`p-4 mx-6 mt-6 rounded-lg flex items-center gap-3 text-sm shrink-0 ${
+                    reorderStatusMessage.type === 'success'
+                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                      : 'bg-destructive/10 text-destructive border border-destructive/20'
+                  }`}
+                >
+                  {reorderStatusMessage.type === 'success' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
+                  <span>{reorderStatusMessage.text}</span>
+                </div>
+              )}
+
+              {/* Scrollable Content */}
+              <div className="p-6 space-y-6 overflow-y-auto flex-1">
+                {/* Section 1: Main Project Cover */}
+                <div className="bg-background/60 border border-border/80 rounded-lg p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Star size={16} className="text-accent fill-accent" />
+                      <span className="text-xs font-semibold uppercase tracking-wider text-accent">
+                        Main Project Cover Photo
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-muted-foreground">
+                      Shown on Home page, Projects gallery, and header banner
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-5">
+                    <div className="relative w-36 h-24 rounded-lg overflow-hidden border-2 border-accent/70 shadow-lg bg-muted shrink-0">
+                      <img
+                        src={reorderCoverUrl}
+                        alt="Project Cover"
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute bottom-1 left-1 bg-black/80 backdrop-blur text-accent text-[10px] font-mono px-1.5 py-0.5 rounded">
+                        ★ COVER
+                      </span>
+                    </div>
+                    <div className="text-xs text-muted-foreground space-y-1">
+                      <p className="font-medium text-foreground">
+                        This is the current hero cover image for this project.
+                      </p>
+                      <p>
+                        To replace it with another photo from the gallery below, simply click the <span className="text-accent font-semibold">&quot;Make Cover&quot;</span> button on any gallery photo.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section 2: Gallery Sequence */}
+                <div>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <div>
+                      <h4 className="font-display text-lg text-foreground flex items-center gap-2">
+                        Gallery Sequence
+                        <span className="text-xs font-sans text-muted-foreground font-normal">
+                          ({reorderGalleryUrls.length} photos)
+                        </span>
+                      </h4>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        These photos appear in this exact order in the project detail gallery.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <label className="inline-flex items-center gap-2 bg-muted hover:bg-muted/80 text-foreground px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer border border-border transition-colors">
+                        <Upload size={13} /> Add More Photos
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => e.target.files && e.target.files.length > 0 && handleReorderMultipleUpload(e.target.files)}
+                        />
+                      </label>
+                      {reorderGalleryUrls.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setReorderGalleryUrls(reorderProject.gallery_urls ? [...reorderProject.gallery_urls] : [])}
+                          className="px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground border border-border rounded-lg transition-colors flex items-center gap-1.5"
+                          title="Reset to original order"
+                        >
+                          <RotateCcw size={13} /> Reset
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {reorderGalleryUrls.length === 0 ? (
+                    <div className="py-12 border-2 border-dashed border-border rounded-lg text-center text-muted-foreground p-6">
+                      <Images size={32} className="mx-auto mb-2 opacity-50" />
+                      <p className="text-sm font-medium text-foreground">No gallery photos added yet</p>
+                      <p className="text-xs mt-1">Upload multiple photos using the button above.</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                      {reorderGalleryUrls.map((url, idx) => {
+                        const isDragging = reorderDraggedIndex === idx;
+                        const isDragOver = reorderDragOverIndex === idx;
+
+                        return (
+                          <div
+                            key={url + idx}
+                            draggable
+                            onDragStart={(e) => {
+                              setReorderDraggedIndex(idx);
+                              e.dataTransfer.effectAllowed = 'move';
+                            }}
+                            onDragOver={(e) => {
+                              e.preventDefault();
+                              if (reorderDraggedIndex === null || reorderDraggedIndex === idx) return;
+                              setReorderDragOverIndex(idx);
+                            }}
+                            onDragLeave={() => {
+                              if (reorderDragOverIndex === idx) setReorderDragOverIndex(null);
+                            }}
+                            onDrop={(e) => {
+                              e.preventDefault();
+                              if (reorderDraggedIndex === null || reorderDraggedIndex === idx) return;
+                              setReorderGalleryUrls((prev) => reorderArray(prev, reorderDraggedIndex, idx));
+                              setReorderDraggedIndex(null);
+                              setReorderDragOverIndex(null);
+                            }}
+                            onDragEnd={() => {
+                              setReorderDraggedIndex(null);
+                              setReorderDragOverIndex(null);
+                            }}
+                            className={`group relative bg-muted rounded-lg overflow-hidden border transition-all duration-200 select-none ${
+                              isDragging
+                                ? 'opacity-40 scale-95 border-accent'
+                                : isDragOver
+                                ? 'border-accent shadow-[0_0_15px_rgba(200,160,90,0.3)] scale-[1.02] ring-2 ring-accent'
+                                : 'border-border hover:border-foreground/40'
+                            }`}
+                          >
+                            {/* Image Thumbnail */}
+                            <div className="aspect-[4/3] w-full overflow-hidden bg-black/20">
+                              <img
+                                src={url}
+                                alt={`Photo #${idx + 1}`}
+                                className="w-full h-full object-cover pointer-events-none group-hover:scale-105 transition-transform duration-300"
+                              />
+                            </div>
+
+                            {/* Position Badge & Drag Handle */}
+                            <div className="absolute top-2 left-2 flex items-center gap-1 bg-black/75 backdrop-blur text-white text-[11px] font-mono font-bold px-2 py-0.5 rounded shadow">
+                              <GripVertical size={12} className="text-white/60 cursor-grab active:cursor-grabbing" />
+                              <span>#{idx + 1}</span>
+                            </div>
+
+                            {/* Delete Button */}
+                            <button
+                              type="button"
+                              onClick={() => removeReorderGalleryUrl(idx)}
+                              className="absolute top-2 right-2 bg-destructive/90 hover:bg-destructive text-white p-1 rounded-full opacity-80 group-hover:opacity-100 hover:scale-110 transition-all shadow"
+                              title="Remove photo"
+                            >
+                              <X size={12} />
+                            </button>
+
+                            {/* Action Toolbar on Bottom of Card */}
+                            <div className="p-2 bg-card/95 border-t border-border flex items-center justify-between gap-1">
+                              {/* Move Left / Right buttons */}
+                              <div className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  disabled={idx === 0}
+                                  onClick={() => moveReorderGalleryItem(idx, 'left')}
+                                  className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-25 disabled:cursor-not-allowed hover:bg-muted rounded transition-colors"
+                                  title="Move earlier (←)"
+                                >
+                                  <ChevronLeft size={15} />
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={idx === reorderGalleryUrls.length - 1}
+                                  onClick={() => moveReorderGalleryItem(idx, 'right')}
+                                  className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-25 disabled:cursor-not-allowed hover:bg-muted rounded transition-colors"
+                                  title="Move later (→)"
+                                >
+                                  <ChevronRight size={15} />
+                                </button>
+                              </div>
+
+                              {/* Set as Cover button */}
+                              <button
+                                type="button"
+                                onClick={() => makeReorderItemCover(idx)}
+                                className="inline-flex items-center gap-1 text-[10px] text-accent hover:text-white hover:bg-accent px-2 py-0.5 rounded border border-accent/40 transition-colors uppercase tracking-wider font-medium"
+                                title="Set this photo as the main project cover"
+                              >
+                                <Star size={10} /> Cover
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-5 border-t border-border bg-background/80 backdrop-blur flex items-center justify-between shrink-0">
+                <span className="text-xs text-muted-foreground">
+                  💡 Tip: Drag cards directly or use the arrow buttons to position photos.
+                </span>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsReorderModalOpen(false)}
+                    className="px-5 py-2.5 border border-border rounded-lg text-xs uppercase tracking-wider hover:bg-muted transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    disabled={reorderSaving}
+                    onClick={handleSaveReorderedProject}
+                    className="px-6 py-2.5 bg-foreground text-background hover:bg-accent hover:text-white rounded-lg text-xs uppercase tracking-widest font-medium transition-colors disabled:opacity-50 flex items-center gap-2"
+                  >
+                    {reorderSaving ? 'Saving Order…' : 'Save Image Sequence'}
+                  </button>
+                </div>
+              </div>
             </motion.div>
           </div>
         )}

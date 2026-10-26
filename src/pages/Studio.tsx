@@ -12,13 +12,13 @@ const team = [
 ];
 
 const timeline = [
-  ['2020', 'Studio founded above a bookshop in Kala Ghoda, Mumbai.'],
-  ['2021', 'First hospitality commission completed in Udaipur.'],
-  ['2022', 'Recognised by Architectural Digest India Under-40.'],
-  ['2023', 'Landscape practice added; team crosses twelve.'],
-  ['2024', 'Terra Boutique Hotel wins Kyoorius Design Grand Prix.'],
-  ['2025', 'to be filled.'],
-  ['2026', '92 completed projects across seven states.'],
+  ['2020', 'Studio founded near PSG Arts and Science College, Coimbatore.'],
+  ['2021', 'First project at Tirupur a residence (3500 sq.ft)'],
+  ['2022', 'Recognised by CNI'],
+  ['2023', 'Interior execution added; team crosses 15'],
+  ['2024', 'Commercial project stated'],
+  ['2025', 'We entered into construction side.'],
+  ['2026', '15+ projects completed'],
 ];
 
 export default function Studio() {
@@ -26,14 +26,14 @@ export default function Studio() {
     <>
       <SEO
         title="Studio — Practice & Philosophy | SS Architects & Interiors"
-        description="Learn about SS Architects & Interiors — a Mumbai-based architecture practice founded in 2011 specializing in slow, material-first residential, commercial, and landscape design."
+        description="Learn about SS Architects & Interiors — an architecture practice founded in 2020 specializing in slow, material-first residential, commercial, and landscape design."
         canonical="/studio"
         keywords="SS Architects studio, Sangavi Jaisankar architect, Coimbatore architecture firm, sustainable interior design, tropical architecture practice"
         image="https://res.cloudinary.com/swvqqwzn/image/upload/v1789886436/004.webp"
       />
       <PageHeader
         eyebrow="Studio"
-        title={<>A quiet <span className="italic-serif text-accent">practice,</span><br />fifteen years in.</>}
+        title={<>A quiet <span className="italic-serif text-accent">practice,</span><br />seven+ years in.</>}
         image="https://res.cloudinary.com/swvqqwzn/image/upload/v1789886436/004.webp"
         objectPosition="center 45%"
         overlayClassName="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20"
